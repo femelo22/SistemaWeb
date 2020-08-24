@@ -12,6 +12,9 @@ public class ConectionFactory {
 	
 	//método para fazer a conexão com o nosso banco
 	public static Connection getConection() throws SQLException {
+		
+		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+		
 		Connection conexao = DriverManager.getConnection(URL,USUARIO,SENHA);
 		return conexao;	
 	}

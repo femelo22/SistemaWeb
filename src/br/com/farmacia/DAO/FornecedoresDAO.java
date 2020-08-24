@@ -97,7 +97,7 @@ public class FornecedoresDAO {
 	}
 
 	
-	
+	//método para buscar todos os contatos de fornecedor
 	public ArrayList<Fornecedores> listProviders() throws SQLException{
 		
 		String sql = "SELECT * FROM fornecedor ORDER BY idFornecedor ASC";
@@ -123,14 +123,50 @@ public class FornecedoresDAO {
 		return listProviders;	
 	}
 	
+	
+	public ArrayList<Fornecedores> buscarPorDescricao(Fornecedores f) throws SQLException{
+		
+		String sql = "SELECT * FROM fornecedor WHERE nome LIKE ? ORDER BY nome ASC";
+
+		Connection conexao = ConectionFactory.getConection();
+
+		PreparedStatement stmt = conexao.prepareStatement(sql);
+
+		stmt.setString(1, "%" + f.getNome() + "%");
+		
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		ArrayList<Fornecedores> listProviders = new ArrayList<Fornecedores>();
+		
+		while(rs.next()) {
+			Fornecedores item = new Fornecedores();
+			item.setCodigoFornecedor(rs.getInt("idFornecedor"));
+			item.setNome(rs.getString("nome"));
+			item.setEmail(rs.getString("email"));
+			item.setTelefone(rs.getString("telefone"));
+			
+			listProviders.add(item);
+		}	
+		return listProviders;	
+	}
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) {
 		
 
+		Fornecedores f = new Fornecedores();
+		f.setNome("ax");
 		FornecedoresDAO fdao = new FornecedoresDAO();
-
+		
 		try {
 			
-			ArrayList<Fornecedores> lista = fdao.listProviders();
+			ArrayList<Fornecedores> lista = fdao.buscarPorDescricao(f);
 			
 			for(Fornecedores fo: lista) {
 			System.out.println("fornecedor: " + fo);
